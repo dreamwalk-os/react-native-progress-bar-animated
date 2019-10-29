@@ -1,20 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  View,
-  Animated,
-  Easing,
-} from 'react-native';
+import { View, Animated, Easing } from 'react-native';
 
 class ProgressBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      progress: props.value,
+      progress: props.value
     };
-    
+
     this.widthAnimation = new Animated.Value(0);
     this.backgroundAnimation = new Animated.Value(0);
     this.backgroundInterpolationValue = null;
@@ -55,19 +51,19 @@ class ProgressBar extends React.Component {
   }
 
   animateWidth() {
-    const toValue = ((this.props.width * this.state.progress) / 100) - this.props.borderWidth * 2;
+    const toValue = (this.props.width * this.state.progress) / 100 - this.props.borderWidth * 2;
 
     Animated.timing(this.widthAnimation, {
       easing: Easing[this.props.barEasing],
       toValue: toValue > 0 ? toValue : 0,
-      duration: this.props.barAnimationDuration,
+      duration: this.props.barAnimationDuration
     }).start();
   }
 
   animateBackground() {
     Animated.timing(this.backgroundAnimation, {
       toValue: 1,
-      duration: this.props.backgroundAnimationDuration,
+      duration: this.props.backgroundAnimationDuration
     }).start();
   }
 
@@ -75,26 +71,29 @@ class ProgressBar extends React.Component {
     if (this.props.backgroundColorOnComplete) {
       this.backgroundInterpolationValue = this.backgroundAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [this.props.backgroundColor, this.props.backgroundColorOnComplete],
+        outputRange: [this.props.progressColor, this.props.backgroundColorOnComplete]
       });
     }
 
     return (
-      <View style={{
-        width: this.props.width,
-        height: this.props.height,
-        borderWidth: this.props.borderWidth,
-        borderColor: this.props.borderColor,
-        borderRadius: this.props.borderRadius,
-        backgroundColor: this.props.underlyingColor
-      }}
-      >
-        <Animated.View style={{
-          height: this.props.height - (this.props.borderWidth * 2),
-          width: this.widthAnimation,
-          backgroundColor: this.backgroundInterpolationValue || this.props.backgroundColor,
+      <View
+        style={{
+          width: this.props.width,
+          height: this.props.height,
+          borderWidth: this.props.borderWidth,
+          borderColor: this.props.borderColor,
           borderRadius: this.props.borderRadius,
+          backgroundColor: this.props.backgroundColor,
+          marginBottom: this.props.marginBottom
         }}
+      >
+        <Animated.View
+          style={{
+            height: this.props.height - this.props.borderWidth * 2,
+            width: this.widthAnimation,
+            backgroundColor: this.backgroundInterpolationValue || this.props.progressColor,
+            borderRadius: this.props.borderRadius
+          }}
         />
       </View>
     );
@@ -102,7 +101,6 @@ class ProgressBar extends React.Component {
 }
 
 ProgressBar.propTypes = {
-
   /**
    * Bar values
    */
@@ -112,14 +110,7 @@ ProgressBar.propTypes = {
   /**
    * Animations
    */
-  barEasing: PropTypes.oneOf([
-    'bounce',
-    'cubic',
-    'ease',
-    'sin',
-    'linear',
-    'quad',
-  ]),
+  barEasing: PropTypes.oneOf(['bounce', 'cubic', 'ease', 'sin', 'linear', 'quad']),
   barAnimationDuration: PropTypes.number,
   backgroundAnimationDuration: PropTypes.number,
 
@@ -137,7 +128,7 @@ ProgressBar.propTypes = {
   /**
    * Callbacks
    */
-  onComplete: PropTypes.func,
+  onComplete: PropTypes.func
 };
 
 ProgressBar.defaultProps = {
@@ -157,7 +148,7 @@ ProgressBar.defaultProps = {
   borderColor: '#C8CCCE',
   borderRadius: 6,
 
-  onComplete: null,
+  onComplete: null
 };
 
 export default ProgressBar;
